@@ -62,7 +62,36 @@ A developer can interact with this chatbot to:
 | Deployment     | `Hugging Face Spaces` (completely free tier)                |
 
 ---
+💸 Cost and Hosting Information
+🧠 Inference
+This POC does not use OpenAI. Instead, it leverages free, open-source LLMs hosted by Hugging Face, such as:
+google/flan-t5-xl
+mistralai/Mistral-7B-Instruct-v0.1
 
+These models are loaded via the transformers library and run entirely within the Hugging Face Space using the CPU/GPU resources provided for free (within limits).
+🟢 This means you are not charged for inference, as long as you stay within Hugging Face's free tier resource constraints.
+✅ No OpenAI key is required.
+
+🚀 Hosting
+This project is deployed on Hugging Face Spaces using:
+Gradio UI (chat interface)
+requirements.txt for installing dependencies
+README.md for metadata and configuration
+app.py as the entry point
+Hugging Face offers free Spaces with:
+CPU (free tier)
+16 GB of RAM
+Automatic deployment on git push
+Public or private repo settings
+💡 Hugging Face’s free tier is sufficient for running this POC unless you require faster inference or GPU compute (available via paid options).
+
+✅ Summary
+Component	Service	Free?	Notes
+LLM Inference	Hugging Face models	✅ Yes	No OpenAI API key or paid service used
+Embeddings	Sentence Transformers	✅ Yes	Using all-MiniLM-L6-v2 via Hugging Face, CPU-compatible
+Vector Store	FAISS	✅ Yes	Open-source and runs in memory within the Space
+UI	Gradio	✅ Yes	Free and easy to use in Hugging Face Spaces
+Hosting	Hugging Face Spaces	✅ Yes	Free for CPU usage, with basic memory and compute allocation
 ## 📁 Data Folder Suggestions (`data/`)
 
 Include these types of files to make the assistant functional:
