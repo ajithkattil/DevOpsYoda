@@ -1,0 +1,9 @@
+This is a sample infrastructure document.
+
+The application uses a GitHub Actions workflow for CI/CD:
+- On push to `main`, tests are run
+- On successful test, Docker image is built and pushed to ECR
+
+The Kubernetes cluster is deployed on EKS.
+Monitoring is done via Prometheus and Grafana.
+
