@@ -1,0 +1,9 @@
+langchain
+langchain-community
+transformers
+sentence-transformers
+accelerate
+faiss-cpu
+gradio==3.50.2
+python-dotenv
+torch
