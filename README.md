@@ -33,10 +33,6 @@ pinned: false
   - Summarizes pod or pipeline failure logs
   - Can be extended to generate code (e.g., Terraform)
 
-- 🤖 **Agentic Reasoning** *(via LangChain Agent)*:
-  - Selects the right tool based on task (log summarizer, YAML linter, etc.)
-  - Multi-step thinking possible with agent tools
-
 ---
 
 ## 🧪 Enhanced POC Use Case: "Ask Me Anything About Your Infra"
@@ -52,106 +48,107 @@ A developer can interact with this chatbot to:
 
 ## 🛠️ Tech Stack Used
 
-| Layer           | Technology                                                 |
-|----------------|-------------------------------------------------------------|
-| LLM            | `mistralai/Mistral-7B-Instruct-v0.1` or `google/flan-t5-xl` |
-| Embeddings     | `sentence-transformers/all-MiniLM-L6-v2`                    |
-| RAG            | `LangChain + FAISS`                                         |
-| Agentic Flow   | `LangChain Agents + Toolset`                                |
-| UI             | `Gradio` (chat interface)                                   |
-| Deployment     | `Hugging Face Spaces` (completely free tier)                |
+| Layer           | Technology                          |
+|----------------|--------------------------------------|
+| LLM            | `OpenAI GPT-3.5 Turbo`               |
+| Embeddings     | `OpenAIEmbeddings`                   |
+| RAG            | `LangChain + FAISS`                  |
+| UI             | `Gradio` (chat interface)            |
+| Deployment     | Local or Hugging Face Spaces         |
 
 ---
-💸 Cost and Hosting Information
-🧠 Inference
-This POC does not use OpenAI. Instead, it leverages free, open-source LLMs hosted by Hugging Face, such as:
-google/flan-t5-xl
-mistralai/Mistral-7B-Instruct-v0.1
 
-These models are loaded via the transformers library and run entirely within the Hugging Face Space using the CPU/GPU resources provided for free (within limits).
-🟢 This means you are not charged for inference, as long as you stay within Hugging Face's free tier resource constraints.
-✅ No OpenAI key is required.
+💸 **Cost and Hosting Information**
 
-🚀 Hosting
-This project is deployed on Hugging Face Spaces using:
-Gradio UI (chat interface)
-requirements.txt for installing dependencies
-README.md for metadata and configuration
-app.py as the entry point
-Hugging Face offers free Spaces with:
-CPU (free tier)
-16 GB of RAM
-Automatic deployment on git push
-Public or private repo settings
-💡 Hugging Face’s free tier is sufficient for running this POC unless you require faster inference or GPU compute (available via paid options).
+### 🧠 Inference
 
+This POC uses **OpenAI GPT-3.5-Turbo** via API.  
+You **must provide your own API key** via a `.env` file.
+
+```env
+OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ✅ Summary
 Component	Service	Free?	Notes
-LLM Inference	Hugging Face models	✅ Yes	No OpenAI API key or paid service used
-Embeddings	Sentence Transformers	✅ Yes	Using all-MiniLM-L6-v2 via Hugging Face, CPU-compatible
-Vector Store	FAISS	✅ Yes	Open-source and runs in memory within the Space
-UI	Gradio	✅ Yes	Free and easy to use in Hugging Face Spaces
-Hosting	Hugging Face Spaces	✅ Yes	Free for CPU usage, with basic memory and compute allocation
-## 📁 Data Folder Suggestions (`data/`)
+LLM Inference	OpenAI	❌ No	Requires API key and will incur usage cost
+Embeddings	OpenAI	❌ No	Included in OpenAI's usage
+Vector Store	FAISS	✅ Yes	In-memory, open-source
+UI	Gradio	✅ Yes	Free and lightweight
+Hosting	Hugging Face	✅ Yes*	Free CPU tier available; good for demos
 
+📁 Data Folder Suggestions (data/)
 Include these types of files to make the assistant functional:
 
-- `jenkinsfile.txt`, `github-actions.yaml`  
-- `terraform.tf`, `infra.md`  
-- `k8s-deployment.yaml` (intentional issues welcome)  
-- `pod-logs.txt`, `cicd-errors.log`  
-- `best-practices.pdf`, `readme.md`  
+jenkinsfile.txt, github-actions.yaml
 
----
+terraform.tf, infra.md
 
-## 💬 Sample Prompts for Demo
+k8s-deployment.yaml (intentional issues welcome)
 
-- “Why might this Kubernetes YAML fail to deploy?”
-- “Explain this GitHub Actions pipeline”
-- “Summarize these CI/CD logs”
-- “Generate Terraform for an EC2 instance”
-- “What’s wrong with this pod log?”
+pod-logs.txt, cicd-errors.log
 
----
+best-practices.pdf, readme.md
 
-## 📁 Folder Structure
+💬 Sample Prompts for Demo
+“Why might this Kubernetes YAML fail to deploy?”
 
+“Explain this GitHub Actions pipeline”
+
+“Summarize these CI/CD logs”
+
+“Generate Terraform for an EC2 instance”
+
+“What’s wrong with this pod log?”
+
+📁 Folder Structure
+bash
+Copy
+Edit
 DevOpsYoda/
 ├── app.py
 ├── requirements.txt
 ├── .gitignore
+├── .env                  # Not committed
 ├── README.md
 └── data/
-├── jenkinsfile.txt
-├── k8s-deployment.yaml
-├── terraform-snippet.tf
-├── pod-log.txt
-└── best-practices.pdf
-
-
----
-
-## 🔧 Run Locally
-
-```bash
+    ├── jenkinsfile.txt
+    ├── k8s-deployment.yaml
+    ├── terraform-snippet.tf
+    ├── pod-log.txt
+    └── best-practices.pdf
+🔧 Run Locally
+bash
+Copy
+Edit
 git clone https://github.com/yourusername/DevOpsYoda.git
 cd DevOpsYoda
-pip install --break-system-packages -r requirements.txt
-python3 app.py
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+Then, create a .env file with your OpenAI key:
 
-🌍 Deploy on Hugging Face (Free)
-Go to https://huggingface.co/spaces
+bash
+Copy
+Edit
+echo "OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" > .env
+Start the app:
 
-Create a new Space → Choose Gradio
+bash
+Copy
+Edit
+python app.py
+Go to http://127.0.0.1:7860 to interact.
 
-Clone the repo into the Space or push via:
+🌍 Optional: Deploy on Hugging Face Spaces
+Gradio-based UI works seamlessly on Spaces
 
+Push this repo to your Hugging Face Space
+
+Ensure .env or Secret token is configured (for OpenAI access)
+
+bash
+Copy
+Edit
 git remote add space https://<token>@huggingface.co/spaces/<user>/DevOpsYoda
 git push --force space main
-
-Set your OPENAI_API_KEY or use a free LLM like flan-t5-xl
-
 📜 License
-MIT License
-
-
+MIT License – Free to use, fork, or adapt
